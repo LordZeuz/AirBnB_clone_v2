@@ -73,7 +73,7 @@ Advanced syntax is implemented for the following commands:
 ###### Example 0: Create an object
 Usage: create <class_name>
 ```
-(hbnb) create BaseModel
+(hbnb) create User first_name="Betty"
 ```
 ```
 (hbnb) create BaseModel
