@@ -131,7 +131,6 @@ class HBNBCommand(cmd.Cmd):
                 attr = param[0].strip('"')
                 if hasattr(new_instance, attr):
                     value = param[1].strip('"')
-                    quote_idx = value.find('"')
                     if '_' in value:
                         value = value.replace('_', ' ')
                     setattr(new_instance, param[0], value)
@@ -218,11 +217,11 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all().items():
                 print_list.append(str(v))
 
         print(print_list)

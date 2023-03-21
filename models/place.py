@@ -1,13 +1,10 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
-from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Table, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from os import getenv
 import models
-
-
 
 
 class Place(BaseModel, Base):
@@ -23,9 +20,8 @@ class Place(BaseModel, Base):
     latitude = 0.0
     longitude = 0.0
     amenity_ids = []
-    __tablename__ = "places"
     """
-
+    __tablename__ = "places"
     city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
     name = Column(String(128), nullable=False)

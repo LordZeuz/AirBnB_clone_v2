@@ -72,7 +72,7 @@ class test_create_state(TestCase):
             HBNBCommand().onecmd('create State name="California"')
             self.id = f.getvalue().strip()
 
-    def test_place_attr(self):
+    def test_state_attr(self):
         '''Test state attrs'''
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd(f'show State {self.id}')
@@ -88,7 +88,7 @@ class test_create_amenity(TestCase):
             HBNBCommand().onecmd('create Amenity name="wifi"')
             self.id = f.getvalue().strip()
 
-    def test_place_attr(self):
+    def test_amenity_attr(self):
         '''test if attrs are correct'''
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd(f'show Amenity {self.id}')
@@ -105,7 +105,7 @@ class test_create_review(TestCase):
                                  text="Good_place"')
             self.id = f.getvalue().strip()
 
-    def test_place_attr(self):
+    def test_review_attr(self):
         '''Test for appropriate place attr'''
         with patch('sys.stdout', new=StringIO()) as f:
             HBNBCommand().onecmd(f'show Review {self.id}')
