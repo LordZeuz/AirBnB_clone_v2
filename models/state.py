@@ -3,6 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
+import os
 
 
 class State(BaseModel, Base):
@@ -15,8 +16,7 @@ class State(BaseModel, Base):
     def cities(self):
         '''returns the list of City instances with state_id==State.id'''
         from models.city import City
-        from models.__init__ import storage
         all_city = storage.all(City)
-        rel_city = {k: v for k, v in all_city.items()
-                    if v.state_id == self.id}
-        return rel_city
+        rel_cit = [city for city in models.storage.all(City).values()
+                   if self.id == city.state_id]
+        return rel_cit
