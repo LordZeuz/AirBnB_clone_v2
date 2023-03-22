@@ -22,7 +22,7 @@ class BaseModel:
             self.updated_at = datetime.now()
         else:
             for d in ['created_at', 'updated_at']:
-                 kwargs[d] = datetime.fromisoformat(kwargs[d])
+                kwargs[d] = datetime.fromisoformat(kwargs[d])
             del kwargs['__class__']
             self.__dict__.update(kwargs)
 
