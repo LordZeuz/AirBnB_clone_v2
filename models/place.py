@@ -40,7 +40,7 @@ class Place(BaseModel, Base):
                           ForeignKey('amenities.id'), primary_key=True,
                           nullable=False)
                           )
-    amenities = relationship('Amenity', secondary=place_amenity,
+    amenities = relationship('Amenity', secondary="place_amenity",
                              viewonly=False)
 
     @property
@@ -50,9 +50,8 @@ class Place(BaseModel, Base):
         '''
         from models.__init__ import storage
         from models.amenity import Amenity
-        all_amenity = storage.all(Amenity)
-        rel_amenity = {k: v for k, v in all_amenity.items()
-                       if v.id in amenity_ids}
+        rel_amenity = [storage.all(Amenity).get(amenity_id)
+                           for amenity_id in self.amenity_ids]
         return rel_amenity
 
     @amenities.setter
