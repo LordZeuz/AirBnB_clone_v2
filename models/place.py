@@ -32,3 +32,31 @@ class Place(BaseModel, Base):
     longitude = Column(Float)
     amenity_ids = []
     reviews = relationship("Review", backref="place")
+
+    place_amenity = Table('place_amenity', Base.metadata, Column('place_id',
+                          String(60), ForeignKey('places.id'),
+                          primary_key=True, nullable=False),
+                          Column('amenity_id', String(60),
+                          ForeignKey('amenities.id'), primary_key=True,
+                          nullable=False)
+                          )
+    amenities = relationship('Amenity', secondary=place_amenity,
+                             viewonly=False)
+
+    @property
+    def amenities(self):
+        '''returns the list of Amenity instances based on the attributes
+           amenity_ids that contains all Amenity.id linked to the Place
+        '''
+        from models.__init__ import storage
+        from models.amenity import Amenity
+        all_amenity = storage.all(Amenity)
+        rel_amenity = {k: v for k, v in all_amenity.items()
+                       if v.id in amenity_ids}
+        return rel_amenity
+
+    @amenities.setter
+    def amenities(self, obj):
+        ''' Adds Amenity.id to the attribute amenity_ids'''
+        if isinstance(obj, Amenity):
+            self.amenity_ids.append(obj.id)
