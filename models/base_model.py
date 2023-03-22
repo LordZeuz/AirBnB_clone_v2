@@ -17,18 +17,11 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if kwargs:
-            if 'updated_at' in kwargs:
-                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                         '%Y-%m-%dT%H:%M:%S.%f'
-                                                         )
-            if 'created_at' in kwargs:
-                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                         '%Y-%m-%dT%H:%M:%S.%f'
-                                                         )
-            if '__class__' in kwargs:
-                del kwargs['__class__']
-            if 'id' not in kwargs:
-                self.id = str(uuid.uuid4())
+            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                                                     '%Y-%m-%dT%H:%M:%S.%f')
+            del kwargs['__class__']
             self.__dict__.update(kwargs)
         else:
             self.id = str(uuid.uuid4())
@@ -55,10 +48,8 @@ class BaseModel:
             del self.__dict__["_sa_instance_state"]
         dictionary = dict(self.__dict__)
         dictionary['__class__'] = self.__class__.__name__
-        if 'created_at' in dictionary:
-            dictionary['created_at'] = dictionary['created_at'].isoformat()
-        if 'updated_at' in dictionary:
-            dictionary['updated_at'] = dictionary['updated_at'].isoformat()
+        dictionary['created_at'] = dictionary['created_at'].isoformat()
+        dictionary['updated_at'] = dictionary['updated_at'].isoformat()
         return dictionary
 
     def delete(self):
