@@ -1,24 +1,25 @@
 #!/usr/bin/python3
-''' Script to br run for remote server'''
+''' fabfile to run on remote server'''
 
 from datetime import datetime
 from fabric.api import env, run, put, local
 import os
 
-env.hosts = ['18.209.224.36', '52.72.32.178']
-env.user = "ubuntu"
+
+env.hosts = ['35.153.19.82', '52.91.202.212']
+env.user = 'ubuntu'
 
 
 def do_pack():
-    '''generates a .tgz archive from the contents of folder'''
+    '''generates a .tgz file from webstatic'''
     try:
         local('mkdir -p versions')
         form = '%Y%m%d%H%M%S'
         tarfile = ('versions/web_static_{}.tgz'
-                   .format(datetime.now().strftime('%Y%m%d%H%M%S')))
-        res = local("tar -cvzf {} web_static/".format(tarfile))
-        print('web_static packed: {} -> {} Bytes'.format(tarfile,
-              os.stat(tarfile).st_size))
+                   .format(datetime.now().strftime(form)))
+        local("tar -cvzf {} web_static/".format(tarfile))
+        size = os.stat(output).st_size
+        print("web_static packed: {} -> {} Bytes".format(tarfile, size))
         return tarfile
     except Exception:
         return None
@@ -49,8 +50,8 @@ def do_deploy(archive_path):
 
 
 def deploy():
-    '''Handles everything about deployment'''
-    arch_path = do_pack()
-    if not arch_path:
+    """Create and distribute an archive to a web server."""
+    file = do_pack()
+    if file is None:
         return False
-    return do_deploy(arch_path)
+    return do_deploy(file)
