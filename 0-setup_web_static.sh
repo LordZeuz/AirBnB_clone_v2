@@ -4,11 +4,11 @@
 apt-get update
 apt-get -y install nginx
 ufw allow "Nginx HTTP"
-mkdir /data/
-mkdir /data/web_static/
-mkdir /data/web_static/releases/
-mkdir /data/web_static/shared/
-mkdir /data/web_static/releases/test/
+mkdir -p /data/
+mkdir -p /data/web_static/
+mkdir -p /data/web_static/releases/
+mkdir -p /data/web_static/shared/
+mkdir -p /data/web_static/releases/test/
 echo "<html>
   <head>
   </head>

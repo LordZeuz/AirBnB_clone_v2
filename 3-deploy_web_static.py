@@ -1,12 +1,27 @@
 #!/usr/bin/python3
-# deploying archive with fabric
+''' Script to br run for remote server'''
 
-from fabric.api import env, run, put
+from datetime import datetime
+from fabric.api import env, run, put, local
 import os
 
+env.hosts = ['18.209.224.36', '52.72.32.178']
+env.user = "ubuntu"
 
-env.hosts = ['35.153.19.82', '52.91.202.212']
-env.user = 'ubuntu'
+
+def do_pack():
+    '''generates a .tgz archive from the contents of folder'''
+    try:
+        local('mkdir -p versions')
+        form = '%Y%m%d%H%M%S'
+        tarfile = ('versions/web_static_{}.tgz'
+                   .format(datetime.now().strftime('%Y%m%d%H%M%S')))
+        res = local("tar -cvzf {} web_static/".format(tarfile))
+        print('web_static packed: {} -> {} Bytes'.format(tarfile,
+              os.stat(tarfile).st_size))
+        return tarfile
+    except Exception:
+        return None
 
 
 def do_deploy(archive_path):
@@ -31,3 +46,11 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
+
+
+def deploy():
+    '''Handles everything about deployment'''
+    arch_path = do_pack()
+    if not arch_path:
+        return False
+    return do_deploy(arch_path)

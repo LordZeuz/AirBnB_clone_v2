@@ -1,12 +1,15 @@
 #!/usr/bin/python3
-# deploying archive with fabric
+''' fabfile to run on remote server'''
 
-from fabric.api import env, run, put
+from datetime import datetime
+from fabric.api import env, run, put, local
 import os
 
+env.hosts = ['18.209.224.36', '52.72.32.178']
+env.user = "ubuntu"
 
-env.hosts = ['35.153.19.82', '52.91.202.212']
-env.user = 'ubuntu'
+
+
 
 
 def do_deploy(archive_path):
@@ -31,3 +34,11 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
+
+
+def deploy():
+    '''Handles everything about deployment'''
+    arch_path = do_pack()
+    if not arch_path:
+        return False
+    return do_deploy(arch_path)
