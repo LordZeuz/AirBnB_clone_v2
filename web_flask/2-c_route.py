@@ -5,6 +5,7 @@ The application listens on 0.0.0.0, port 5000.
 Routes:
     /: Displays 'Hello HBNB!'
    /hbnb: Displays "HBNB!'
+   /c/<text>: Displays 'C' followed by the value of <text>.
 """
 
 
@@ -18,8 +19,14 @@ def hello_route():
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hello_route():
+def hbnb_route():
     return 'HBNB!'
+
+
+@app.route('/c/<text>', strict_slashes=False)
+def c_route(text):
+    text = text.replace("_", " ")
+    return "C {}".format(text)
 
 
 if __name__ == "__main__":
