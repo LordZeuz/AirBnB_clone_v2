@@ -56,7 +56,7 @@ class Place(BaseModel, Base):
             rel_rev = [review for review in models.storage.all(Review).values()
                        if self.id == review.place_id]
             return rel_rev
-    
+
         @property
         def amenities(self):
             '''returns the list of Amenity instances based on the attributes

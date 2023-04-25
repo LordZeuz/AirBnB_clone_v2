@@ -58,11 +58,11 @@ class FileStorage:
         """delete obj from __objects if it's inside else nothing"""
         if obj:
             try:
-                key = f'{obj.__class__.__name__}.{obj.id}'
+                key = '{}.{}'.format(obj.__class__.__name__, obj.id)
                 del self.__objects[key]
             except KeyError:
                 pass
 
     def close(self):
-        """ calls reload()"""
+        """close file i guess"""
         self.reload()

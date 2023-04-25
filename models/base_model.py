@@ -17,19 +17,17 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
         if kwargs:
-            if 'updated_at' in kwargs:
-                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
-                                                         '%Y-%m-%dT%H:%M:%S.%f'
-                                                         )
-            if 'created_at' in kwargs:
-                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
-                                                         '%Y-%m-%dT%H:%M:%S.%f'
-                                                         )
-            if '__class__' in kwargs:
-                del kwargs['__class__']
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "updated_at":
+                    value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                if key != "__class__":
+                    setattr(self, key, value)
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
-            self.__dict__.update(kwargs)
+            if "created_at" not in kwargs:
+                self.created_at = datetime.now()
+            if "updated_at" not in kwargs:
+                self.updated_at = datetime.now()
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
@@ -37,8 +35,11 @@ class BaseModel:
 
     def __str__(self):
         """Returns a string representation of the instance"""
-        cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        dic = dict(self.__dict__)
+        if '_sa_instance_state' in dic.keys():
+            del dic['_sa_instance_state']
+        return "[{}] ({}) {}".format(
+            type(self).__name__, self.id, dic)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
@@ -49,9 +50,9 @@ class BaseModel:
 
     def to_dict(self):
         """Convert instance into dict format"""
-        if "_sa_instance_state" in self.__dict__:
-            del self.__dict__["_sa_instance_state"]
         dictionary = dict(self.__dict__)
+        if '_sa_instance_state' in dictionary.keys():
+            del dictionary['_sa_instance_state']
         dictionary['__class__'] = self.__class__.__name__
         if 'created_at' in dictionary:
             dictionary['created_at'] = dictionary['created_at'].isoformat()
